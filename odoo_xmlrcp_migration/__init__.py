@@ -66,9 +66,13 @@ class odoo_xmlrcp_migration(object):
             field_temp['from'] = {'name': field, 'type': fields_from[field]['type']}
             if 'relation' in fields_from[field]:
                 field_temp['from']['relation'] = fields_from[field]['relation']
+            if 'relation_field' in fields_from[field]:
+                field_temp['from']['relation_field'] = fields_from[field]['relation_field']
             field_temp['to'] = {'name': field, 'type': fields_to[field]['type']}
             if 'relation' in fields_to[field]:
                 field_temp['to']['relation'] = fields_from[field]['relation']
+            if 'relation_field' in fields_from[field]:
+                field_temp['to']['relation_field'] = fields_to[field]['relation_field']
             if fields_from[field]['type'] == fields_from[field]['type']:
                 field_temp['map_method'] = 'magic_map'
             else:
@@ -99,21 +103,32 @@ class odoo_xmlrcp_migration(object):
         result = {}
 
         for plan in self.plan:
-            with open('%s/%s_%s.yaml' % (self.data_dir, plan, model_name)) as file:
-                data = yaml.full_load(file)
-                if not len(result):
-                    result = data
-                else:
-                    result['fields'] += data['fields']
-                    result['domain'] += data['domain']
+            try:
+                with open('%s/%s_%s.yaml' % (self.data_dir, plan, model_name)) as file:
+                    data = yaml.full_load(file)
+                    if not len(result):
+                        result = data
+                    else:
+                        result['fields'] += data['fields']
+                        result['domain'] += data['domain']
+            except IOError:
+                pass
         if len(result) == 0:
-            raise "Not exists plan for %s" % model_from
+            print ("Not exists plan for %s" % model_from)
         self.cache['plans'][model_name] = result
         return result
 
-    def migrate(self, model_name, row_ids=False):
+    def get_context(self, **kwargs):
+        return kwargs['context'] if 'context' in kwargs else {}
+
+    def migrate(self, model_name, **kwargs):
         plan = self.load_plan(model_name)
-        if not row_ids:
+        res_ids = {'create': [], 'write': []}
+        context = self.get_context()
+
+        if 'row_ids' in kwargs:
+            row_ids = kwargs['row_ids']
+        else:
             row_ids = self.get_ids(plan['model_from'], plan['domain'] + self.domain)
         n = 100
         chunk = [row_ids[i:i + n] for i in xrange(0, len(row_ids), n)]
@@ -121,9 +136,10 @@ class odoo_xmlrcp_migration(object):
             rows = self.read(plan['model_from'], ids, plan['fields'].keys())
             for row in rows:
                 data = self.map_data(plan, row)
-                self.save(plan, data, row['id'])
-
+                action, model, res_id = self.save(plan, data, row['id'])
+                res_ids[action].append(res_id)
             break
+        return res_ids
 
     def save(self, plan, values, orig_id):
         external_id_method = getattr(self, plan['external_id_method'])
@@ -131,7 +147,6 @@ class odoo_xmlrcp_migration(object):
         server = self.socks['to']
         sock = server['sock']
         if len(ext_id):
-            print ('update')
             sock.execute(
                 server['dbname'],
                 server['uid'],
@@ -141,9 +156,9 @@ class odoo_xmlrcp_migration(object):
                 [ext_id[0]['res_id']],
                 values
             )
+            print ('update %s %s' % (plan['model_to'], ext_id[0]['res_id']))
+            return ('write', plan['model_to'], ext_id)
         else:
-            print ('create')
-
             res_id = sock.execute(
                 server['dbname'],
                 server['uid'],
@@ -152,7 +167,9 @@ class odoo_xmlrcp_migration(object):
                 'create',
                 [values]
             )
+            print ('create%s %s' % (plan['model_to'], res_id[0]))
             self.add_external_id(plan['model_to'], orig_id, res_id[0], plan['external_id_nomenclature'])
+            return ('create', plan['model_to'], res_id[0])
 
     def get_ids(self, model, domain):
         server = self.socks['from']
@@ -185,9 +202,17 @@ class odoo_xmlrcp_migration(object):
     def magic_map(self, value, field, plan):
         field_data = plan['fields'][field]
         if field_data['from']['type'] in ['char', 'float', 'integer', 'text', 'html', 'boolean']:
+            # to-do : Cast Value type
             return value
         elif field_data['from']['type'] == 'one2many':
+            # to-do: Aca Tendia que migar ignorando el rel_field
+            # ej : sale.order.line no deberia migrar order_id (lo definiria cuando guardo el modelo padre)
+            return None
+
+        elif field_data['from']['type'] in ['many2one'] and value:
             subplan = self.load_plan(field_data['from']['relation'])
+            if len(subplan) == 0:
+                return None
             external_id_method = getattr(self, subplan['external_id_method'])
             ext_id = external_id_method(subplan['model_to'], value[0], subplan['external_id_nomenclature'])
             if len(ext_id):
@@ -195,12 +220,24 @@ class odoo_xmlrcp_migration(object):
             else:
                 new = self.migrate(
                     field_data['from']['relation'],
-                    [value[0]]
+                    row_ids=[value[0]]
                 )
-        elif field_data['from']['type'] in ['many2one']:
-            pass
+                return new['create']['res_id']
         elif field_data['from']['type'] in ['many2many']:
-            pass
+            subplan = self.load_plan(field_data['from']['relation'])
+            external_id_method = getattr(self, subplan['external_id_method'])
+            res_ids = []
+            for res_id in value:
+                ext_id = external_id_method(subplan['model_to'], res_id, subplan['external_id_nomenclature'])
+                if len(ext_id):
+                    res_ids.append(ext_id[0]['res_id'])
+                else:
+                    new = self.migrate(
+                        field_data['from']['relation'],
+                        row_ids=[res_id]
+                    )
+                    res_ids.append(ext_id[0]['res_id'])
+            return [(6, 0, res_ids)]
 
         return None
 
