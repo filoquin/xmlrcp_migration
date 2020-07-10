@@ -1,0 +1,203 @@
+model_from: res.partner
+model_to: res.partner
+external_id_nomenclature: res_partner_%s
+external_id_method: row_get_id
+domain: []
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    to:
+      name: active
+      type: boolean
+  category_id:
+    from:
+      name: category_id
+      relation: res.partner.category
+      type: many2many
+    to:
+      name: category_id
+      relation: res.partner.category
+      type: many2many
+  city:
+    from:
+      name: city
+      type: char
+    to:
+      name: city
+      type: char
+  color:
+    from:
+      name: color
+      type: integer
+    to:
+      name: color
+      type: integer
+  comment:
+    from:
+      name: comment
+      type: text
+    to:
+      name: comment
+      type: text
+  country_id:
+    from:
+      name: country_id
+      relation: res.country
+      type: many2one
+    to:
+      name: country_id
+      relation: res.country
+      type: many2one
+  credit_limit:
+    from:
+      name: credit_limit
+      type: float
+    to:
+      name: credit_limit
+      type: float
+  date:
+    from:
+      name: date
+      type: date
+    to:
+      name: date
+      type: date
+  debit_limit:
+    from:
+      name: debit_limit
+      type: float
+    to:
+      name: debit_limit
+      type: monetary
+  email:
+    from:
+      name: email
+      type: char
+    to:
+      name: email
+      type: char
+  employee:
+    from:
+      name: employee
+      type: boolean
+    to:
+      name: employee
+      type: boolean
+  function:
+    from:
+      name: function
+      type: char
+    to:
+      name: function
+      type: char
+  is_company:
+    from:
+      name: is_company
+      type: boolean
+    to:
+      name: is_company
+      type: boolean
+  lang:
+    from:
+      name: lang
+      type: selection
+    to:
+      name: lang
+      type: selection
+  mobile:
+    from:
+      name: mobile
+      type: char
+    to:
+      name: mobile
+      type: char
+  name:
+    from:
+      name: name
+      type: char
+    to:
+      name: name
+      type: char
+  phone:
+    from:
+      name: phone
+      type: char
+    to:
+      name: phone
+      type: char
+  ref:
+    from:
+      name: ref
+      type: char
+    to:
+      name: ref
+      type: char
+  state_id:
+    from:
+      name: state_id
+      relation: res.country.state
+      type: many2one
+    to:
+      name: state_id
+      relation: res.country.state
+      type: many2one
+  street:
+    from:
+      name: street
+      type: char
+    to:
+      name: street
+      type: char
+  street2:
+    from:
+      name: street2
+      type: char
+    to:
+      name: street2
+      type: char
+  title:
+    from:
+      name: title
+      relation: res.partner.title
+      type: many2one
+    to:
+      name: title
+      relation: res.partner.title
+      type: many2one
+  type:
+    from:
+      name: type
+      type: selection
+    to:
+      name: type
+      type: selection
+  tz:
+    from:
+      name: tz
+      type: selection
+    to:
+      name: tz
+      type: selection
+  vat:
+    from:
+      name: vat
+      type: char
+    to:
+      name: vat
+      type: char
+  website:
+    from:
+      name: website
+      type: char
+    to:
+      name: website
+      type: char
+  zip:
+    from:
+      name: zip
+      type: char
+    to:
+      name: zip
+      type: char
