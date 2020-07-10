@@ -143,7 +143,7 @@ class odoo_xmlrcp_migration(object):
 
     def save(self, plan, values, orig_id):
         external_id_method = getattr(self, plan['external_id_method'])
-        ext_id = external_id_method(plan['model_to'], orig_id, plan['external_id_nomenclature'])
+        ext_id = external_id_method(plan, orig_id, plan['external_id_nomenclature'])
         server = self.socks['to']
         sock = server['sock']
         if len(ext_id):
@@ -214,7 +214,7 @@ class odoo_xmlrcp_migration(object):
             if len(subplan) == 0:
                 return None
             external_id_method = getattr(self, subplan['external_id_method'])
-            ext_id = external_id_method(subplan['model_to'], value[0], subplan['external_id_nomenclature'])
+            ext_id = external_id_method(subplan, value[0], subplan['external_id_nomenclature'])
             if len(ext_id):
                 return ext_id[0]['res_id']
             else:
@@ -228,7 +228,7 @@ class odoo_xmlrcp_migration(object):
             external_id_method = getattr(self, subplan['external_id_method'])
             res_ids = []
             for res_id in value:
-                ext_id = external_id_method(subplan['model_to'], res_id, subplan['external_id_nomenclature'])
+                ext_id = external_id_method(subplan, res_id, subplan['external_id_nomenclature'])
                 if len(ext_id):
                     res_ids.append(ext_id[0]['res_id'])
                 else:
@@ -241,12 +241,13 @@ class odoo_xmlrcp_migration(object):
 
         return None
 
-    def row_get_id(self, model, value, nomeclature):
+    def row_get_id(self, plan, value, nomeclature):
         server = self.socks['to']
         sock = server['sock']
         args = [('name', '=', nomeclature % value),
                 ('module', '=', 'xmlrpc_migration'),
-                ('model', '=', model)]
+                ('model', '=', plan['model_to'])]
+
         return sock.execute(
             server['dbname'],
             server['uid'],
@@ -265,6 +266,7 @@ class odoo_xmlrcp_migration(object):
                 'module': 'xmlrpc_migration',
                 'model': model,
                 'res_id': dest_id,
+                'noupdate': True
                 }]
 
         return sock.execute(
@@ -275,3 +277,28 @@ class odoo_xmlrcp_migration(object):
             'create',
             vals
         )
+
+    def same_external_id(self, plan, res_id, nomeclature):
+        server = self.socks['from']
+        sock = server['sock']
+        external_id = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.data',
+            'search_read',
+            [('res_id', '=', res_id), ('model', '=', plan['model_from'])],
+            ['complete_name', 'res_id', 'name']
+        )
+        if len(external_id):
+            server = self.socks['to']
+            sock = server['sock']
+            return sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                'ir.model.data',
+                'search_read',
+                [('name', '=', external_id[0]['name']), ('model', '=', plan['model_to'])],
+                ['res_id']
+            )

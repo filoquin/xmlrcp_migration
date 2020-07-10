@@ -1,0 +1,14 @@
+model_from: res.country
+model_to: res.country
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: res_country_%s
+fields:
+  code:
+    from:
+      name: code
+      type: char
+    map_method: magic_map
+    to:
+      name: code
+      type: char
