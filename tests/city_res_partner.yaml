@@ -1,0 +1,17 @@
+model_from: res.partner
+model_to: res.partner
+external_id_nomenclature: res_partner_%s
+external_id_method: row_get_id
+domain: []
+fields:
+  city_id:
+    cache: True    
+    from:
+      name: city_id
+      relation: res.country.state.city
+      type: many2one
+    to:
+      name: city_id
+      relation: res.city
+      type: many2many
+

@@ -1,0 +1,40 @@
+model_from: res.country.state.city
+model_to: res.city
+external_id_method: row_get_id
+external_id_nomenclature: res_city_%s
+domain: []
+fields:
+  name:
+    from:
+      name: name
+      type: char
+    to:
+      name: name
+      type: char
+  code:
+    from:
+      name: code
+      type: char
+    to:
+      name: zipcode
+      type: char
+  country_id:
+    cache: True
+    from:
+      name: country_id
+      relation: res.country
+      type: many2one
+    to:
+      name: country_id
+      relation: res.country
+      type: many2one
+  state_id:
+    cache: True
+    from:
+      name: state_id
+      relation: res.country.state
+      type: many2one
+    to:
+      name: state_id
+      relation: res.country.state
+      type: many2one

@@ -135,7 +135,7 @@ class odoo_xmlrcp_migration(object):
         for ids in chunk:
             rows = self.read(plan['model_from'], ids, plan['fields'].keys())
             for row in rows:
-                data = self.map_data(plan, row)
+                data = self.map_data(plan, row, kwargs)
                 action, model, res_id = self.save(plan, data, row['id'])
                 res_ids[action].append(res_id)
             break
@@ -167,7 +167,7 @@ class odoo_xmlrcp_migration(object):
                 'create',
                 [values]
             )
-            print ('create%s %s' % (plan['model_to'], res_id[0]))
+            print ('create %s %s' % (plan['model_to'], res_id[0]))
             self.add_external_id(plan['model_to'], orig_id, res_id[0], plan['external_id_nomenclature'])
             return ('create', plan['model_to'], res_id[0])
 
@@ -189,14 +189,18 @@ class odoo_xmlrcp_migration(object):
             fields
         )
 
-    def map_data(self, plan, row):
+    def get_default(self, field, kwargs):
+        return kwargs.get('default_%s' % field, None)
+
+    def map_data(self, plan, row, kwargs):
         maping = {}
         for field in plan['fields']:
             f = plan['fields'][field]
             map_method = getattr(self, f['map_method'] if 'map_method' in f else 'magic_map')
             val = map_method(row[f['from']['name']], field, plan, row)
-            if val is not None:
-                maping[f['to']['name']] = val
+            default_value = self.get_default(field, kwargs)
+            if val is not None or default_value is not None:
+                maping[f['to']['name']] = val if val is not None else default_value
         return maping
 
     def magic_map(self, value, field, plan, row):
@@ -214,7 +218,7 @@ class odoo_xmlrcp_migration(object):
             if len(subplan) == 0:
                 return None
             external_id_method = getattr(self, subplan['external_id_method'])
-            ext_id = external_id_method(subplan, value[0], row)
+            ext_id = external_id_method(subplan, value[0], row, field_data.get('cache', False))
             if len(ext_id):
                 return ext_id[0]['res_id']
             else:
@@ -222,7 +226,7 @@ class odoo_xmlrcp_migration(object):
                     field_data['from']['relation'],
                     row_ids=[value[0]]
                 )
-                return new['create']['res_id']
+                return new['create'][0]
         elif field_data['from']['type'] in ['many2many']:
             subplan = self.load_plan(field_data['from']['relation'])
             external_id_method = getattr(self, subplan['external_id_method'])
@@ -236,7 +240,7 @@ class odoo_xmlrcp_migration(object):
                         field_data['from']['relation'],
                         row_ids=[res_id]
                     )
-                    res_ids.append(ext_id[0]['res_id'])
+                    res_ids.append(new['create'][0])
             return [(6, 0, res_ids)]
 
         return None
@@ -259,10 +263,10 @@ class odoo_xmlrcp_migration(object):
             ['res_id']
         )
 
-        if cache:
-            if plan['model_form'] not in self.cache['external_ids']:
+        if cache and len(res):
+            if plan['model_from'] not in self.cache['external_ids']:
                 self.cache['external_ids'][plan['model_from']] = {}
-            self.cache['external_ids'][plan['model_form']][value] = res[0]['res_id']
+            self.cache['external_ids'][plan['model_from']][value] = res[0]['res_id']
 
         return res
 
@@ -311,7 +315,7 @@ class odoo_xmlrcp_migration(object):
                 ['res_id']
             )
             if cache:
-                if plan['model_form'] not in self.cache['external_ids']:
+                if plan['model_from'] not in self.cache['external_ids']:
                     self.cache['external_ids'][plan['model_from']] = {}
                 self.cache['external_ids'][plan['model_from']][res_id] = res[0]['res_id']
             return res
@@ -344,7 +348,7 @@ class odoo_xmlrcp_migration(object):
             )
             if len(external_id):
                 if cache:
-                    if plan['model_form'] not in self.cache['external_ids']:
+                    if plan['model_from'] not in self.cache['external_ids']:
                         self.cache['external_ids'][plan['model_from']] = {}
                     self.cache['external_ids'][plan['model_from']][res_id] = external_id[0]
 
