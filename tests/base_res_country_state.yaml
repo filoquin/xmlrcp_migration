@@ -1,0 +1,34 @@
+model_from: res.country.state
+model_to: res.country.state
+domain: []
+external_id_method: match_field
+external_id_field_from: code
+external_id_field_to: code
+external_id_nomenclature: res_country_state_%s
+fields:
+  code:
+    from:
+      name: code
+      type: char
+    map_method: magic_map
+    to:
+      name: code
+      type: char
+  country_id:
+    from:
+      name: country_id
+      relation: res.country
+      type: many2one
+    map_method: magic_map
+    to:
+      name: country_id
+      relation: res.country
+      type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char

@@ -194,12 +194,12 @@ class odoo_xmlrcp_migration(object):
         for field in plan['fields']:
             f = plan['fields'][field]
             map_method = getattr(self, f['map_method'] if 'map_method' in f else 'magic_map')
-            val = map_method(row[f['from']['name']], field, plan)
+            val = map_method(row[f['from']['name']], field, plan, row)
             if val is not None:
-                maping[f['to']['name']] = map_method(row[f['from']['name']], field, plan)
+                maping[f['to']['name']] = map_method(row[f['from']['name']], field, plan, row)
         return maping
 
-    def magic_map(self, value, field, plan):
+    def magic_map(self, value, field, plan, row):
         field_data = plan['fields'][field]
         if field_data['from']['type'] in ['char', 'float', 'integer', 'text', 'html', 'boolean']:
             # to-do : Cast Value type
@@ -214,7 +214,7 @@ class odoo_xmlrcp_migration(object):
             if len(subplan) == 0:
                 return None
             external_id_method = getattr(self, subplan['external_id_method'])
-            ext_id = external_id_method(subplan, value[0], subplan['external_id_nomenclature'])
+            ext_id = external_id_method(subplan, value[0], row)
             if len(ext_id):
                 return ext_id[0]['res_id']
             else:
@@ -228,7 +228,7 @@ class odoo_xmlrcp_migration(object):
             external_id_method = getattr(self, subplan['external_id_method'])
             res_ids = []
             for res_id in value:
-                ext_id = external_id_method(subplan, res_id, subplan['external_id_nomenclature'])
+                ext_id = external_id_method(subplan, res_id, row)
                 if len(ext_id):
                     res_ids.append(ext_id[0]['res_id'])
                 else:
@@ -241,9 +241,10 @@ class odoo_xmlrcp_migration(object):
 
         return None
 
-    def row_get_id(self, plan, value, nomeclature):
+    def row_get_id(self, plan, value, row):
         server = self.socks['to']
         sock = server['sock']
+        nomeclature = plan['external_id_nomenclature']
         args = [('name', '=', nomeclature % value),
                 ('module', '=', 'xmlrpc_migration'),
                 ('model', '=', plan['model_to'])]
@@ -278,7 +279,7 @@ class odoo_xmlrcp_migration(object):
             vals
         )
 
-    def same_external_id(self, plan, res_id, nomeclature):
+    def same_external_id(self, plan, res_id, row):
         server = self.socks['from']
         sock = server['sock']
         external_id = sock.execute(
@@ -302,3 +303,32 @@ class odoo_xmlrcp_migration(object):
                 [('name', '=', external_id[0]['name']), ('model', '=', plan['model_to'])],
                 ['res_id']
             )
+        return None
+
+    def match_field(self, plan, res_id, row):
+        server = self.socks['from']
+        sock = server['sock']
+        external_field_value = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            plan['model_from'],
+            'read',
+            [res_id],
+            [plan['external_id_field_from']]
+        )
+        if len(external_field_value):
+
+            server = self.socks['to']
+            sock = server['sock']
+            external_id = sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                plan['model_to'],
+                'search',
+                [(plan['external_id_field_to'], '=', external_field_value[0][plan['external_id_field_from']])]
+            )
+            if len(external_id):
+                return [{'res_id': external_id[0]}]
+        return None
