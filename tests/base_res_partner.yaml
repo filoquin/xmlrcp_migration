@@ -12,6 +12,7 @@ fields:
       name: active
       type: boolean
   category_id:
+    cache: True
     from:
       name: category_id
       relation: res.partner.category
@@ -42,6 +43,7 @@ fields:
       name: comment
       type: text
   country_id:
+    cache: True
     from:
       name: country_id
       relation: res.country
@@ -135,6 +137,7 @@ fields:
       name: ref
       type: char
   state_id:
+    cache: True
     from:
       name: state_id
       relation: res.country.state
@@ -180,13 +183,6 @@ fields:
     to:
       name: tz
       type: selection
-  vat:
-    from:
-      name: vat
-      type: char
-    to:
-      name: vat
-      type: char
   website:
     from:
       name: website

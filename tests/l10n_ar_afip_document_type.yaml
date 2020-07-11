@@ -1,0 +1,15 @@
+model_from: afip.document_type
+model_to: l10n_latam.identification.type
+external_id_nomenclature: document_type_%s
+external_id_method: match_field
+external_id_field_from: name
+external_id_field_to: name
+domain: []
+fields:
+  name:
+    from:
+      name: name
+      type: char
+    to:
+      name: name
+      type: char

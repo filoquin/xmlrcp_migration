@@ -1,0 +1,24 @@
+model_from: res.partner
+model_to: res.partner
+external_id_nomenclature: res_partner_%s
+external_id_method: row_get_id
+domain: []
+fields:
+  document_type_id:
+    cache: True    
+    from:
+      name: document_type_id
+      relation: afip.document_type
+      type: many2one
+    to:
+      name: l10n_latam_identification_type_id
+      relation: l10n_latam.identification.type
+      type: many2many
+  document_number:
+    from:
+      name: document_number
+      type: char
+    to:
+      name: vat
+      type: char
+    map_method: map_document_number

@@ -1,6 +1,4 @@
 from . import odoo_xmlrcp_migration
-from xmlrpc import client as xmlrpclib
-import yaml
 
 
 def res_country_map_external_id(self):

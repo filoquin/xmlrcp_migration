@@ -109,7 +109,7 @@ class odoo_xmlrcp_migration(object):
                     if not len(result):
                         result = data
                     else:
-                        result['fields'] += data['fields']
+                        result['fields'].update(data['fields'])
                         result['domain'] += data['domain']
             except IOError:
                 pass
@@ -196,7 +196,7 @@ class odoo_xmlrcp_migration(object):
             map_method = getattr(self, f['map_method'] if 'map_method' in f else 'magic_map')
             val = map_method(row[f['from']['name']], field, plan, row)
             if val is not None:
-                maping[f['to']['name']] = map_method(row[f['from']['name']], field, plan, row)
+                maping[f['to']['name']] = val
         return maping
 
     def magic_map(self, value, field, plan, row):
@@ -241,7 +241,7 @@ class odoo_xmlrcp_migration(object):
 
         return None
 
-    def row_get_id(self, plan, value, row):
+    def row_get_id(self, plan, value, row, cache=False):
         server = self.socks['to']
         sock = server['sock']
         nomeclature = plan['external_id_nomenclature']
@@ -249,7 +249,7 @@ class odoo_xmlrcp_migration(object):
                 ('module', '=', 'xmlrpc_migration'),
                 ('model', '=', plan['model_to'])]
 
-        return sock.execute(
+        res = sock.execute(
             server['dbname'],
             server['uid'],
             server['pwd'],
@@ -258,6 +258,13 @@ class odoo_xmlrcp_migration(object):
             args,
             ['res_id']
         )
+
+        if cache:
+            if plan['model_form'] not in self.cache['external_ids']:
+                self.cache['external_ids'][plan['model_from']] = {}
+            self.cache['external_ids'][plan['model_form']][value] = res[0]['res_id']
+
+        return res
 
     def add_external_id(self, model, orig_id, dest_id, nomeclature):
         server = self.socks['to']
@@ -279,7 +286,7 @@ class odoo_xmlrcp_migration(object):
             vals
         )
 
-    def same_external_id(self, plan, res_id, row):
+    def same_external_id(self, plan, res_id, row, cache=False):
         server = self.socks['from']
         sock = server['sock']
         external_id = sock.execute(
@@ -294,7 +301,7 @@ class odoo_xmlrcp_migration(object):
         if len(external_id):
             server = self.socks['to']
             sock = server['sock']
-            return sock.execute(
+            res = sock.execute(
                 server['dbname'],
                 server['uid'],
                 server['pwd'],
@@ -303,9 +310,15 @@ class odoo_xmlrcp_migration(object):
                 [('name', '=', external_id[0]['name']), ('model', '=', plan['model_to'])],
                 ['res_id']
             )
+            if cache:
+                if plan['model_form'] not in self.cache['external_ids']:
+                    self.cache['external_ids'][plan['model_from']] = {}
+                self.cache['external_ids'][plan['model_from']][res_id] = res[0]['res_id']
+            return res
+
         return None
 
-    def match_field(self, plan, res_id, row):
+    def match_field(self, plan, res_id, row, cache=False):
         server = self.socks['from']
         sock = server['sock']
         external_field_value = sock.execute(
@@ -330,5 +343,10 @@ class odoo_xmlrcp_migration(object):
                 [(plan['external_id_field_to'], '=', external_field_value[0][plan['external_id_field_from']])]
             )
             if len(external_id):
+                if cache:
+                    if plan['model_form'] not in self.cache['external_ids']:
+                        self.cache['external_ids'][plan['model_from']] = {}
+                    self.cache['external_ids'][plan['model_from']][res_id] = external_id[0]
+
                 return [{'res_id': external_id[0]}]
         return None
