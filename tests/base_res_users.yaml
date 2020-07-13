@@ -1,0 +1,30 @@
+model_from: res.users
+model_to: res.users
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_users_%s
+fields:
+  login:
+    from:
+      name: login
+      type: char
+    to:
+      name: login
+      type: char
+  active:
+    from:
+      name: active
+      type: boolean
+    to:
+      name: active
+      type: boolean
+  partner_id:
+    from:
+      name: partner_id
+      relation: res.partner
+      type: many2one
+    map_method: magic_map
+    to:
+      name: partner_id
+      relation: res.partner
+      type: many2one

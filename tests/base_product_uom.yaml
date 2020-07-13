@@ -1,0 +1,65 @@
+model_from: product.uom
+model_to: uom.uom
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: product_uom_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  category_id:
+    from:
+      name: category_id
+      relation: product.uom.categ
+      type: many2one
+    map_method: magic_map
+    to:
+      name: category_id
+      relation: uom.category
+      type: many2one
+  factor:
+    from:
+      name: factor
+      type: float
+    map_method: magic_map
+    to:
+      name: factor
+      type: float
+  factor_inv:
+    from:
+      name: factor_inv
+      type: float
+    map_method: magic_map
+    to:
+      name: factor_inv
+      type: float
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  rounding:
+    from:
+      name: rounding
+      type: float
+    map_method: magic_map
+    to:
+      name: rounding
+      type: float
+  uom_type:
+    from:
+      name: uom_type
+      type: selection
+    map_method: magic_map
+    to:
+      name: uom_type
+      type: selection
+

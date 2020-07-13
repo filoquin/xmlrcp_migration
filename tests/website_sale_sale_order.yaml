@@ -1,0 +1,31 @@
+  cart_quantity:
+    from:
+      name: cart_quantity
+      type: integer
+    map_method: magic_map
+    to:
+      name: cart_quantity
+      type: integer
+  website_message_ids:
+    from:
+      name: website_message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: website_message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+  website_order_line:
+    from:
+      name: website_order_line
+      relation: sale.order.line
+      relation_field: order_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: website_order_line
+      relation: sale.order.line
+      type: one2many

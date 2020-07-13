@@ -60,26 +60,30 @@ class odoo_xmlrcp_migration(object):
         keys_to = set(fields_to.keys())
         intersection = keys_from & keys_to
         for field in list(intersection):
-            if fields_to[field]['store'] is False:
-                continue
-            field_temp = {}
-            field_temp['from'] = {'name': field, 'type': fields_from[field]['type']}
-            if 'relation' in fields_from[field]:
-                field_temp['from']['relation'] = fields_from[field]['relation']
-            if 'relation_field' in fields_from[field]:
-                field_temp['from']['relation_field'] = fields_from[field]['relation_field']
-            field_temp['to'] = {'name': field, 'type': fields_to[field]['type']}
-            if 'relation' in fields_to[field]:
-                field_temp['to']['relation'] = fields_from[field]['relation']
-            if 'relation_field' in fields_from[field]:
-                field_temp['to']['relation_field'] = fields_to[field]['relation_field']
-            if fields_from[field]['type'] == fields_from[field]['type']:
-                field_temp['map_method'] = 'magic_map'
-            else:
-                field_temp['map_method'] = '%s2%s' % (fields_from[field]['type'] == fields_from[field]['type'])
+            # if fields_to[field].get('store', False):
+            #    continue
+            fields[field] = self.dump_config_field(field, fields_from, fields_to)
 
-            fields[field] = field_temp
         return fields
+
+    def dump_config_field(self, field, fields_from, fields_to):
+        field_temp = {}
+        field_temp['from'] = {'name': field, 'type': fields_from[field]['type']}
+        if 'relation' in fields_from[field]:
+            field_temp['from']['relation'] = fields_from[field]['relation']
+        if 'relation_field' in fields_from[field]:
+            field_temp['from']['relation_field'] = fields_from[field]['relation_field']
+        field_temp['to'] = {'name': field, 'type': fields_to[field]['type']}
+
+        if 'relation' in fields_to[field]:
+            field_temp['to']['relation'] = fields_to[field]['relation']
+        if 'relation_field' in fields_to[field]:
+            field_temp['to']['relation_field'] = fields_to[field]['relation_field']
+        if fields_to[field]['type'] == fields_to[field]['type']:
+            field_temp['map_method'] = 'magic_map'
+        else:
+            field_temp['map_method'] = '%s2%s' % (fields_from[field]['type'] == fields_from[field]['type'])
+        return field_temp
 
     def save_plan(self, model_from, model_to=False, plan=False):
         model_to = model_to if model_to else model_from
@@ -124,7 +128,10 @@ class odoo_xmlrcp_migration(object):
     def migrate(self, model_name, **kwargs):
         plan = self.load_plan(model_name)
         res_ids = {'create': [], 'write': []}
-        context = self.get_context()
+
+        field_names = plan['fields'].keys()
+        if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
+            field_names.remove(kwargs['ignore_field'])
 
         if 'row_ids' in kwargs:
             row_ids = kwargs['row_ids']
@@ -133,7 +140,7 @@ class odoo_xmlrcp_migration(object):
         n = 100
         chunk = [row_ids[i:i + n] for i in xrange(0, len(row_ids), n)]
         for ids in chunk:
-            rows = self.read(plan['model_from'], ids, plan['fields'].keys())
+            rows = self.read(plan['model_from'], ids, field_names)
             for row in rows:
                 data = self.map_data(plan, row, kwargs)
                 action, model, res_id = self.save(plan, data, row['id'])
@@ -157,19 +164,23 @@ class odoo_xmlrcp_migration(object):
                 values
             )
             print ('update %s %s' % (plan['model_to'], ext_id[0]['res_id']))
-            return ('write', plan['model_to'], ext_id)
+            return ('write', plan['model_to'], [0]['res_id'])
         else:
-            res_id = sock.execute(
-                server['dbname'],
-                server['uid'],
-                server['pwd'],
-                plan['model_to'],
-                'create',
-                [values]
-            )
-            print ('create %s %s' % (plan['model_to'], res_id[0]))
-            self.add_external_id(plan['model_to'], orig_id, res_id[0], plan['external_id_nomenclature'])
-            return ('create', plan['model_to'], res_id[0])
+            try:
+                res_id = sock.execute(
+                    server['dbname'],
+                    server['uid'],
+                    server['pwd'],
+                    plan['model_to'],
+                    'create',
+                    [values]
+                )
+                print ('create %s %s' % (plan['model_to'], res_id[0]))
+                self.add_external_id(plan['model_to'], orig_id, res_id[0], plan['external_id_nomenclature'])
+                return ('create', plan['model_to'], res_id[0])
+            except xmlrpclib.Fault, e:
+                print (e.faultCode)
+                return ('create', plan['model_to'], False)
 
     def get_ids(self, model, domain):
         server = self.socks['from']
@@ -196,6 +207,8 @@ class odoo_xmlrcp_migration(object):
         maping = {}
         for field in plan['fields']:
             f = plan['fields'][field]
+            if f['from']['name'] not in row:
+                continue
             map_method = getattr(self, f['map_method'] if 'map_method' in f else 'magic_map')
             val = map_method(row[f['from']['name']], field, plan, row)
             default_value = self.get_default(field, kwargs)
@@ -205,13 +218,29 @@ class odoo_xmlrcp_migration(object):
 
     def magic_map(self, value, field, plan, row):
         field_data = plan['fields'][field]
-        if field_data['from']['type'] in ['char', 'float', 'integer', 'text', 'html', 'boolean']:
+        if field_data['from']['type'] in ['selection', 'date', 'datetime', 'char', 'float', 'integer', 'text', 'html', 'boolean']:
             # to-do : Cast Value type
             return value
         elif field_data['from']['type'] == 'one2many':
-            # to-do: Aca Tendia que migar ignorando el rel_field
-            # ej : sale.order.line no deberia migrar order_id (lo definiria cuando guardo el modelo padre)
-            return None
+            subplan = self.load_plan(field_data['from']['relation'])
+            if not subplan:
+                return None
+            external_id_method = getattr(self, subplan['external_id_method'])
+            res_ids = []
+            for res_id in value:
+                ext_id = external_id_method(subplan, res_id, row)
+                if len(ext_id):
+                    res_ids.append(ext_id[0]['res_id'])
+                else:
+                    print field_data['from']['relation']
+                    new = self.migrate(
+                        field_data['from']['relation'],
+                        row_ids=[res_id],
+                        ignore_field=field_data['from']['relation_field']
+
+                    )
+                    res_ids.append(new['create'][0])
+            return [(6, 0, res_ids)]
 
         elif field_data['from']['type'] in ['many2one'] and value:
             subplan = self.load_plan(field_data['from']['relation'])
@@ -229,6 +258,8 @@ class odoo_xmlrcp_migration(object):
                 return new['create'][0]
         elif field_data['from']['type'] in ['many2many']:
             subplan = self.load_plan(field_data['from']['relation'])
+            if not subplan:
+                return None
             external_id_method = getattr(self, subplan['external_id_method'])
             res_ids = []
             for res_id in value:

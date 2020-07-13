@@ -1,0 +1,22 @@
+model_from: res.currency
+model_to: res.currency
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: res_currency_%s
+fields:
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  rate:
+    from:
+      name: rate
+      type: float
+    map_method: magic_map
+    to:
+      name: rate
+      type: float

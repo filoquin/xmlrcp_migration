@@ -1,0 +1,204 @@
+model_from: product.template
+model_to: product.template
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_template_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  attribute_line_ids:
+    from:
+      name: attribute_line_ids
+      relation: product.attribute.line
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: attribute_line_ids
+      relation: product.template.attribute.line
+      relation_field: product_tmpl_id
+      type: one2many
+  categ_id:
+    from:
+      name: categ_id
+      relation: product.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: categ_id
+      relation: product.category
+      type: many2one
+  color:
+    from:
+      name: color
+      type: integer
+    map_method: magic_map
+    to:
+      name: color
+      type: integer
+  default_code:
+    from:
+      name: default_code
+      type: char
+    map_method: magic_map
+    to:
+      name: default_code
+      type: char
+  description:
+    from:
+      name: description
+      type: html
+    map_method: magic_map
+    to:
+      name: description
+      type: text
+  description_purchase:
+    from:
+      name: description_purchase
+      type: text
+    map_method: magic_map
+    to:
+      name: description_purchase
+      type: text
+  description_sale:
+    from:
+      name: description_sale
+      type: text
+    map_method: magic_map
+    to:
+      name: description_sale
+      type: text
+  list_price:
+    from:
+      name: list_price
+      type: float
+    map_method: magic_map
+    to:
+      name: list_price
+      type: float
+  lst_price:
+    from:
+      name: lst_price
+      type: float
+    map_method: magic_map
+    to:
+      name: lst_price
+      type: float
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  price:
+    from:
+      name: price
+      type: float
+    map_method: magic_map
+    to:
+      name: price
+      type: float
+  pricelist_id:
+    from:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+    map_method: magic_map
+    to:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+  product_variant_count:
+    from:
+      name: product_variant_count
+      type: integer
+    map_method: magic_map
+    to:
+      name: product_variant_count
+      type: integer
+  product_variant_ids:
+    from:
+      name: product_variant_ids
+      relation: product.product
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: product_variant_ids
+      relation: product.product
+      relation_field: product_tmpl_id
+      type: one2many
+
+  rental:
+    from:
+      name: rental
+      type: boolean
+    map_method: magic_map
+    to:
+      name: rental
+      type: boolean
+
+  taxes_id:
+    from:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+  type:
+    from:
+      name: type
+      type: selection
+    map_method: map_product_type
+    to:
+      name: type
+      type: selection
+  uom_id:
+    from:
+      name: uom_id
+      relation: product.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_id
+      relation: uom.uom
+      type: many2one
+  uom_po_id:
+    from:
+      name: uom_po_id
+      relation: product.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_po_id
+      relation: uom.uom
+      type: many2one
+  volume:
+    from:
+      name: volume
+      type: float
+    map_method: magic_map
+    to:
+      name: volume
+      type: float
+
+  weight:
+    from:
+      name: weight
+      type: float
+    map_method: magic_map
+    to:
+      name: weight
+      type: float
+

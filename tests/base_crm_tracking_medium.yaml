@@ -1,0 +1,22 @@
+model_from: crm.tracking.medium
+model_to: utm.medium
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: crm_tracking_medium_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char

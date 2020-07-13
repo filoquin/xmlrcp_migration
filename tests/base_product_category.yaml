@@ -1,0 +1,83 @@
+model_from: product.category
+model_to: product.category
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_category_%s
+fields:
+  complete_name:
+    from:
+      name: complete_name
+      type: char
+    map_method: magic_map
+    to:
+      name: complete_name
+      type: char
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  parent_id:
+    from:
+      name: parent_id
+      relation: product.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: parent_id
+      relation: product.category
+      type: many2one
+  property_stock_journal:
+    from:
+      name: property_stock_journal
+      relation: account.journal
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_journal
+      relation: account.journal
+      type: many2one
+  property_stock_valuation_account_id:
+    from:
+      name: property_stock_valuation_account_id
+      relation: account.account
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_valuation_account_id
+      relation: account.account
+      type: many2one
+  removal_strategy_id:
+    from:
+      name: removal_strategy_id
+      relation: product.removal
+      type: many2one
+    map_method: magic_map
+    to:
+      name: removal_strategy_id
+      relation: product.removal
+      type: many2one
+  route_ids:
+    from:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+    map_method: magic_map
+    to:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+  total_route_ids:
+    from:
+      name: total_route_ids
+      relation: stock.location.route
+      type: many2many
+    map_method: magic_map
+    to:
+      name: total_route_ids
+      relation: stock.location.route
+      type: many2many
+

@@ -1,0 +1,40 @@
+model_from: product.pricelist
+model_to: product.pricelist
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_pricelist_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+    map_method: magic_map
+    to:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer

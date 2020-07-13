@@ -1,0 +1,14 @@
+model_from: product.uom.categ
+model_to: uom.category
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: product_uom_categ_%s
+fields:
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
