@@ -136,7 +136,8 @@ class odoo_xmlrcp_migration(object):
         if 'row_ids' in kwargs:
             row_ids = kwargs['row_ids']
         else:
-            row_ids = self.get_ids(plan['model_from'], plan['domain'] + self.domain)
+            model_domain = kwargs['domain'] if 'domain' in kwargs else []
+            row_ids = self.get_ids(plan['model_from'], plan['domain'] + model_domain + self.domain)
         n = 100
         chunk = [row_ids[i:i + n] for i in xrange(0, len(row_ids), n)]
         for ids in chunk:
@@ -164,7 +165,7 @@ class odoo_xmlrcp_migration(object):
                 values
             )
             print ('update %s %s' % (plan['model_to'], ext_id[0]['res_id']))
-            return ('write', plan['model_to'], [0]['res_id'])
+            return ('write', plan['model_to'], ext_id)
         else:
             try:
                 res_id = sock.execute(
@@ -232,7 +233,6 @@ class odoo_xmlrcp_migration(object):
                 if len(ext_id):
                     res_ids.append(ext_id[0]['res_id'])
                 else:
-                    print field_data['from']['relation']
                     new = self.migrate(
                         field_data['from']['relation'],
                         row_ids=[res_id],

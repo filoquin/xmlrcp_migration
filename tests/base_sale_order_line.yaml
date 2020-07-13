@@ -40,16 +40,6 @@ fields:
       name: order_id
       relation: sale.order
       type: many2one
-  order_partner_id:
-    from:
-      name: order_partner_id
-      relation: res.partner
-      type: many2one
-    map_method: magic_map
-    to:
-      name: order_partner_id
-      relation: res.partner
-      type: many2one
   price_reduce:
     from:
       name: price_reduce

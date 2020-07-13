@@ -14,12 +14,10 @@ plan.plan.append('city')
 # plan.domain = [('id', '>', 3), ]
 # plan.migrate('res.users')
 
-order_ids = plan.migrate('sale.order')
-print order_ids
+order_ids = plan.migrate('sale.order', row_ids=[225850])
 
 row_ids = order_ids['write']+order_ids['create']
-print row_ids
-plan.migrate('sale.order.line', row_ids=row_ids)
+plan.migrate('sale.order.line', domain=[('order_id', '=', 225850),])
 
 print plan.cache['external_ids']
 # plan.domain = [('id', '>', 134383), ]
