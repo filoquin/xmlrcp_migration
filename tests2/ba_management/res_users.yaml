@@ -1,0 +1,112 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_users_%s
+fields:
+  debit_limit:
+    from:
+      name: debit_limit
+      type: float
+    map_method: magic_map
+    to:
+      name: debit_limit
+      type: monetary
+  meeting_ids:
+    from:
+      name: meeting_ids
+      relation: calendar.event
+      type: many2many
+    map_method: magic_map
+    to:
+      name: meeting_ids
+      relation: calendar.event
+      type: many2many
+  opportunity_ids:
+    from:
+      name: opportunity_ids
+      relation: crm.lead
+      type: one2many
+    map_method: magic_map
+    to:
+      name: opportunity_ids
+      relation: crm.lead
+      type: one2many
+  property_stock_customer:
+    from:
+      name: property_stock_customer
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_customer
+      relation: stock.location
+      type: many2one
+  property_stock_supplier:
+    from:
+      name: property_stock_supplier
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_supplier
+      relation: stock.location
+      type: many2one
+  sale_order_ids:
+    from:
+      name: sale_order_ids
+      relation: sale.order
+      type: one2many
+    map_method: magic_map
+    to:
+      name: sale_order_ids
+      relation: sale.order
+      type: one2many
+  website_description:
+    from:
+      name: website_description
+      type: html
+    map_method: magic_map
+    to:
+      name: website_description
+      type: html
+  website_meta_description:
+    from:
+      name: website_meta_description
+      type: text
+    map_method: magic_map
+    to:
+      name: website_meta_description
+      type: text
+  website_meta_keywords:
+    from:
+      name: website_meta_keywords
+      type: char
+    map_method: magic_map
+    to:
+      name: website_meta_keywords
+      type: char
+  website_meta_title:
+    from:
+      name: website_meta_title
+      type: char
+    map_method: magic_map
+    to:
+      name: website_meta_title
+      type: char
+  website_published:
+    from:
+      name: website_published
+      type: boolean
+    map_method: magic_map
+    to:
+      name: website_published
+      type: boolean
+  website_short_description:
+    from:
+      name: website_short_description
+      type: text
+    map_method: magic_map
+    to:
+      name: website_short_description
+      type: text
+model_from: res.users
+model_to: res.users

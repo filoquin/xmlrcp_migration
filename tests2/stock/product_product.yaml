@@ -1,0 +1,96 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_product_%s
+fields:
+  location_id:
+    from:
+      name: location_id
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: location_id
+      relation: stock.location
+      type: many2one
+  orderpoint_ids:
+    from:
+      name: orderpoint_ids
+      relation: stock.warehouse.orderpoint
+      relation_field: product_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: orderpoint_ids
+      relation: stock.warehouse.orderpoint
+      relation_field: product_id
+      type: one2many
+  property_stock_inventory:
+    from:
+      name: property_stock_inventory
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_inventory
+      relation: stock.location
+      type: many2one
+  property_stock_production:
+    from:
+      name: property_stock_production
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_production
+      relation: stock.location
+      type: many2one
+  route_ids:
+    from:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+    map_method: magic_map
+    to:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+  sale_delay:
+    from:
+      name: sale_delay
+      type: float
+    map_method: magic_map
+    to:
+      name: sale_delay
+      type: float
+  supplier_taxes_id:
+    from:
+      name: supplier_taxes_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: supplier_taxes_id
+      relation: account.tax
+      type: many2many
+  taxes_id:
+    from:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+  warehouse_id:
+    from:
+      name: warehouse_id
+      relation: stock.warehouse
+      type: many2one
+    map_method: magic_map
+    to:
+      name: warehouse_id
+      relation: stock.warehouse
+      type: many2one
+model_from: product.product
+model_to: product.product

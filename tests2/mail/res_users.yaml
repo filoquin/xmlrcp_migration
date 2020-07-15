@@ -1,0 +1,44 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_users_%s
+fields:
+  alias_contact:
+    from:
+      name: alias_contact
+      type: selection
+    map_method: magic_map
+    to:
+      name: alias_contact
+      type: selection
+  alias_id:
+    from:
+      name: alias_id
+      relation: mail.alias
+      type: many2one
+    map_method: magic_map
+    to:
+      name: alias_id
+      relation: mail.alias
+      type: many2one
+  message_follower_ids:
+    from:
+      name: message_follower_ids
+      relation: res.partner
+      type: many2many
+    map_method: magic_map
+    to:
+      name: message_follower_ids
+      relation: mail.followers
+      type: one2many
+  message_ids:
+    from:
+      name: message_ids
+      relation: mail.message
+      type: one2many
+    map_method: magic_map
+    to:
+      name: message_ids
+      relation: mail.message
+      type: one2many
+model_from: res.users
+model_to: res.users

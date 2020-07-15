@@ -1,0 +1,26 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_partner_%s
+fields:
+  property_stock_customer:
+    from:
+      name: property_stock_customer
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_customer
+      relation: stock.location
+      type: many2one
+  property_stock_supplier:
+    from:
+      name: property_stock_supplier
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_supplier
+      relation: stock.location
+      type: many2one
+model_from: res.partner
+model_to: res.partner

@@ -1,0 +1,102 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: crm_case_section_%s
+fields:
+  alias_contact:
+    from:
+      name: alias_contact
+      type: selection
+    map_method: magic_map
+    to:
+      name: alias_contact
+      type: selection
+  alias_defaults:
+    from:
+      name: alias_defaults
+      type: text
+    map_method: magic_map
+    to:
+      name: alias_defaults
+      type: text
+  alias_force_thread_id:
+    from:
+      name: alias_force_thread_id
+      type: integer
+    map_method: magic_map
+    to:
+      name: alias_force_thread_id
+      type: integer
+  alias_id:
+    from:
+      name: alias_id
+      relation: mail.alias
+      type: many2one
+    map_method: magic_map
+    to:
+      name: alias_id
+      relation: mail.alias
+      type: many2one
+  alias_model_id:
+    from:
+      name: alias_model_id
+      relation: ir.model
+      type: many2one
+    map_method: magic_map
+    to:
+      name: alias_model_id
+      relation: ir.model
+      type: many2one
+  alias_name:
+    from:
+      name: alias_name
+      type: char
+    map_method: magic_map
+    to:
+      name: alias_name
+      type: char
+  alias_parent_model_id:
+    from:
+      name: alias_parent_model_id
+      relation: ir.model
+      type: many2one
+    map_method: magic_map
+    to:
+      name: alias_parent_model_id
+      relation: ir.model
+      type: many2one
+  alias_parent_thread_id:
+    from:
+      name: alias_parent_thread_id
+      type: integer
+    map_method: magic_map
+    to:
+      name: alias_parent_thread_id
+      type: integer
+  alias_user_id:
+    from:
+      name: alias_user_id
+      relation: res.users
+      type: many2one
+    map_method: magic_map
+    to:
+      name: alias_user_id
+      relation: res.users
+      type: many2one
+  use_leads:
+    from:
+      name: use_leads
+      type: boolean
+    map_method: magic_map
+    to:
+      name: use_leads
+      type: boolean
+  use_opportunities:
+    from:
+      name: use_opportunities
+      type: boolean
+    map_method: magic_map
+    to:
+      name: use_opportunities
+      type: boolean
+model_from: crm.case.section
+model_to: crm.team

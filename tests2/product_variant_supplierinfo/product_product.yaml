@@ -1,0 +1,17 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_product_%s
+fields:
+  variant_seller_ids:
+    from:
+      name: variant_seller_ids
+      relation: product.supplierinfo
+      relation_field: product_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: variant_seller_ids
+      relation: product.supplierinfo
+      type: one2many
+model_from: product.product
+model_to: product.product

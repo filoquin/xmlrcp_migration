@@ -1,0 +1,258 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_product_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  attribute_line_ids:
+    from:
+      name: attribute_line_ids
+      relation: product.attribute.line
+      type: one2many
+    map_method: magic_map
+    to:
+      name: attribute_line_ids
+      relation: product.template.attribute.line
+      type: one2many
+  categ_id:
+    from:
+      name: categ_id
+      relation: product.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: categ_id
+      relation: product.category
+      type: many2one
+  color:
+    from:
+      name: color
+      type: integer
+    map_method: magic_map
+    to:
+      name: color
+      type: integer
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+    map_method: magic_map
+    to:
+      name: company_id
+      relation: res.company
+      type: many2one
+  default_code:
+    from:
+      name: default_code
+      type: char
+    map_method: magic_map
+    to:
+      name: default_code
+      type: char
+  description:
+    from:
+      name: description
+      type: text
+    map_method: magic_map
+    to:
+      name: description
+      type: text
+  description_purchase:
+    from:
+      name: description_purchase
+      type: text
+    map_method: magic_map
+    to:
+      name: description_purchase
+      type: text
+  description_sale:
+    from:
+      name: description_sale
+      type: text
+    map_method: magic_map
+    to:
+      name: description_sale
+      type: text
+  list_price:
+    from:
+      name: list_price
+      type: float
+    map_method: magic_map
+    to:
+      name: list_price
+      type: float
+  lst_price:
+    from:
+      name: lst_price
+      type: float
+    map_method: magic_map
+    to:
+      name: lst_price
+      type: float
+  message_follower_ids:
+    from:
+      name: message_follower_ids
+      relation: res.partner
+      type: many2many
+    map_method: magic_map
+    to:
+      name: message_follower_ids
+      relation: mail.followers
+      relation_field: res_id
+      type: one2many
+  message_ids:
+    from:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  packaging_ids:
+    from:
+      name: packaging_ids
+      relation: product.packaging
+      type: many2many
+    map_method: magic_map
+    to:
+      name: packaging_ids
+      relation: product.packaging
+      relation_field: product_id
+      type: one2many
+  price:
+    from:
+      name: price
+      type: float
+    map_method: magic_map
+    to:
+      name: price
+      type: float
+  pricelist_id:
+    from:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+    map_method: magic_map
+    to:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+  product_tmpl_id:
+    from:
+      name: product_tmpl_id
+      relation: product.template
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_tmpl_id
+      relation: product.template
+      type: many2one
+  product_variant_ids:
+    from:
+      name: product_variant_ids
+      relation: product.product
+      type: one2many
+    map_method: magic_map
+    to:
+      name: product_variant_ids
+      relation: product.product
+      type: one2many
+  rental:
+    from:
+      name: rental
+      type: boolean
+    map_method: magic_map
+    to:
+      name: rental
+      type: boolean
+  sale_ok:
+    from:
+      name: sale_ok
+      type: boolean
+    map_method: magic_map
+    to:
+      name: sale_ok
+      type: boolean
+  seller_ids:
+    from:
+      name: seller_ids
+      relation: product.supplierinfo
+      type: many2many
+    map_method: magic_map
+    to:
+      name: seller_ids
+      relation: product.supplierinfo
+      type: one2many
+  standard_price:
+    from:
+      name: standard_price
+      type: float
+    map_method: magic_map
+    to:
+      name: standard_price
+      type: float
+  type:
+    from:
+      name: type
+      type: selection
+    map_method: magic_map
+    to:
+      name: type
+      type: selection
+  uom_id:
+    from:
+      name: uom_id
+      relation: product.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_id
+      relation: uom.uom
+      type: many2one
+  uom_po_id:
+    from:
+      name: uom_po_id
+      relation: product.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_po_id
+      relation: uom.uom
+      type: many2one
+  volume:
+    from:
+      name: volume
+      type: float
+    map_method: magic_map
+    to:
+      name: volume
+      type: float
+  weight:
+    from:
+      name: weight
+      type: float
+    map_method: magic_map
+    to:
+      name: weight
+      type: float
+model_from: product.product
+model_to: product.product

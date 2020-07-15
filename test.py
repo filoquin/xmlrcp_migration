@@ -3,8 +3,8 @@ import l10n_ar_methods
 
 
 plan = odoo_xmlrcp_migration()
-plan.plan.append('l10n_ar')
-plan.plan.append('city')
+plan.module.append('l10n_ar')
+plan.module.append('city')
 # plan.save_plan('res.partner')
 # plan.save_plan('res.partner.category')
 # plan.migrate('res.partner.category')

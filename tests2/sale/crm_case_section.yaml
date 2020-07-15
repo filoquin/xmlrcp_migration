@@ -1,0 +1,22 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: crm_case_section_%s
+fields:
+  invoiced_target:
+    from:
+      name: invoiced_target
+      type: integer
+    map_method: magic_map
+    to:
+      name: invoiced_target
+      type: integer
+  use_quotations:
+    from:
+      name: use_quotations
+      type: boolean
+    map_method: magic_map
+    to:
+      name: use_quotations
+      type: boolean
+model_from: crm.case.section
+model_to: crm.team

@@ -1,13 +1,15 @@
 from configparser import ConfigParser
 from xmlrpc import client as xmlrpclib
 import yaml
+import os
 
 
 class odoo_xmlrcp_migration(object):
     socks = {}
-    plan = ['base']
+    modules = ['base']
     domain = []
     cache = {'plans': {}, 'external_ids': {}}
+    system_fields = ['id', 'write_date', 'write_uid', 'create_date', 'create_uid', '__last_update']
 
     def __init__(self, config_file='/etc/odoo_xmlrcp_migration.conf'):
         self.config = ConfigParser()
@@ -46,59 +48,88 @@ class odoo_xmlrcp_migration(object):
     def clean_cache(self):
         self.cache = {'plans': {}, 'external_ids': {}}
 
-    def fields_get(self, server, model):
+    def xfields_get(self, server, model):
         server = self.socks[server]
         sock = server['sock']
         return sock.execute(server['dbname'], server['uid'], server['pwd'], model, 'fields_get')
+
+    def fields_get(self, server, model, ignore_readonly=False):
+        server = self.socks[server]
+        sock = server['sock']
+        leaf = [('model_id.model', '=', model), ('name', 'not in', self.system_fields)]
+        if ignore_readonly:
+            leaf += [('readonly', '=', False)]
+        f = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.fields',
+            'search_read',
+            leaf, []
+        )
+
+        return {x['name']: x for x in f}
 
     def compare_model(self, model_from, model_to=False):
         fields = {}
         model_to = model_to if model_to else model_from
         fields_from = self.fields_get('from', model_from)
-        fields_to = self.fields_get('to', model_to)
+        fields_to = self.fields_get('to', model_to, True)
         keys_from = set(fields_from.keys())
         keys_to = set(fields_to.keys())
         intersection = keys_from & keys_to
         for field in list(intersection):
-            # if fields_to[field].get('store', False):
+            if fields_from[field]['modules'] not in fields:
+                # to-do: defaultdict ?
+                fields[fields_from[field]['modules']] = {}
+            # if not fields_to[field].get('store', True):
             #    continue
-            fields[field] = self.dump_config_field(field, fields_from, fields_to)
+            fields[fields_from[field]['modules']][field] = self.dump_config_field(field, fields_from, fields_to)
 
         return fields
 
     def dump_config_field(self, field, fields_from, fields_to):
         field_temp = {}
-        field_temp['from'] = {'name': field, 'type': fields_from[field]['type']}
-        if 'relation' in fields_from[field]:
+        field_temp['from'] = {'name': field, 'type': fields_from[field]['ttype']}
+        if fields_from[field]['relation']:
             field_temp['from']['relation'] = fields_from[field]['relation']
-        if 'relation_field' in fields_from[field]:
+        if fields_from[field]['relation_field']:
             field_temp['from']['relation_field'] = fields_from[field]['relation_field']
-        field_temp['to'] = {'name': field, 'type': fields_to[field]['type']}
+        field_temp['to'] = {'name': field, 'type': fields_to[field]['ttype']}
 
-        if 'relation' in fields_to[field]:
+        if fields_to[field]['relation']:
             field_temp['to']['relation'] = fields_to[field]['relation']
-        if 'relation_field' in fields_to[field]:
+        if fields_to[field]['relation_field']:
             field_temp['to']['relation_field'] = fields_to[field]['relation_field']
-        if fields_to[field]['type'] == fields_to[field]['type']:
+        if fields_to[field]['ttype'] == fields_to[field]['ttype']:
             field_temp['map_method'] = 'magic_map'
         else:
-            field_temp['map_method'] = '%s2%s' % (fields_from[field]['type'] == fields_from[field]['type'])
+            field_temp['map_method'] = '%s2%s' % (fields_from[field]['ttype'] == fields_from[field]['ttype'])
         return field_temp
+
+    def ensure_dir(self, file_path):
+        directory = os.path.dirname(file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
     def save_plan(self, model_from, model_to=False, plan=False):
         model_to = model_to if model_to else model_from
         if not plan:
-            plan = self.plan[0]
+            plan = self.modules[0]
         data = {}
         data['model_from'] = model_from
         data['model_to'] = model_to
         data['domain'] = []
         data['external_id_nomenclature'] = model_from.replace('.', '_') + "_%s"
         data['external_id_method'] = 'row_get_id'
-        data['fields'] = self.compare_model(model_from, model_to)
+        fields_by_module = self.compare_model(model_from, model_to)
         model_name = model_from.replace('.', '_')
-        with open('%s/%s_%s.yaml' % (self.data_dir, plan, model_name), 'w') as file:
-            yaml.dump(data, file)
+        for module in fields_by_module:
+            data['fields'] = fields_by_module[module]
+            file_name = '%s/%s/%s.yaml' % (self.data_dir, module, model_name)
+            self.ensure_dir(file_name)
+            with open(file_name, 'w+') as file:
+                yaml.dump(data, file)
 
     def load_plan(self, model_from):
         model_name = model_from.replace('.', '_')
@@ -106,9 +137,9 @@ class odoo_xmlrcp_migration(object):
             return self.cache['plans'][model_name]
         result = {}
 
-        for plan in self.plan:
+        for module in self.modules:
             try:
-                with open('%s/%s_%s.yaml' % (self.data_dir, plan, model_name)) as file:
+                with open('%s/%s/%s.yaml' % (self.data_dir, module, model_name)) as file:
                     data = yaml.full_load(file)
                     if not len(result):
                         result = data

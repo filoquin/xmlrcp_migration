@@ -1,0 +1,44 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_template_%s
+fields:
+  property_stock_inventory:
+    from:
+      name: property_stock_inventory
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_inventory
+      relation: stock.location
+      type: many2one
+  property_stock_production:
+    from:
+      name: property_stock_production
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: property_stock_production
+      relation: stock.location
+      type: many2one
+  route_ids:
+    from:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+    map_method: magic_map
+    to:
+      name: route_ids
+      relation: stock.location.route
+      type: many2many
+  sale_delay:
+    from:
+      name: sale_delay
+      type: float
+    map_method: magic_map
+    to:
+      name: sale_delay
+      type: float
+model_from: product.template
+model_to: product.template

@@ -1,0 +1,26 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_template_%s
+fields:
+  supplier_taxes_id:
+    from:
+      name: supplier_taxes_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: supplier_taxes_id
+      relation: account.tax
+      type: many2many
+  taxes_id:
+    from:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: taxes_id
+      relation: account.tax
+      type: many2many
+model_from: product.template
+model_to: product.template

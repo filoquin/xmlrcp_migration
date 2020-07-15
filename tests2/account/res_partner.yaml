@@ -1,0 +1,14 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_partner_%s
+fields:
+  debit_limit:
+    from:
+      name: debit_limit
+      type: float
+    map_method: magic_map
+    to:
+      name: debit_limit
+      type: monetary
+model_from: res.partner
+model_to: res.partner

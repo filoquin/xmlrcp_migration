@@ -1,0 +1,74 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: crm_case_section_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  color:
+    from:
+      name: color
+      type: integer
+    map_method: magic_map
+    to:
+      name: color
+      type: integer
+  member_ids:
+    from:
+      name: member_ids
+      relation: res.users
+      type: many2many
+    map_method: magic_map
+    to:
+      name: member_ids
+      relation: res.users
+      relation_field: sale_team_id
+      type: one2many
+  message_follower_ids:
+    from:
+      name: message_follower_ids
+      relation: res.partner
+      type: many2many
+    map_method: magic_map
+    to:
+      name: message_follower_ids
+      relation: mail.followers
+      relation_field: res_id
+      type: one2many
+  message_ids:
+    from:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  user_id:
+    from:
+      name: user_id
+      relation: res.users
+      type: many2one
+    map_method: magic_map
+    to:
+      name: user_id
+      relation: res.users
+      type: many2one
+model_from: crm.case.section
+model_to: crm.team

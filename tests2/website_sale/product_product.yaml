@@ -1,0 +1,17 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_product_%s
+fields:
+  website_message_ids:
+    from:
+      name: website_message_ids
+      relation: mail.message
+      type: one2many
+    map_method: magic_map
+    to:
+      name: website_message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+model_from: product.product
+model_to: product.product

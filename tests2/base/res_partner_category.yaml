@@ -1,0 +1,54 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_partner_category_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  child_ids:
+    from:
+      name: child_ids
+      relation: res.partner.category
+      relation_field: parent_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: child_ids
+      relation: res.partner.category
+      relation_field: parent_id
+      type: one2many
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  parent_id:
+    from:
+      name: parent_id
+      relation: res.partner.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: parent_id
+      relation: res.partner.category
+      type: many2one
+  partner_ids:
+    from:
+      name: partner_ids
+      relation: res.partner
+      type: many2many
+    map_method: magic_map
+    to:
+      name: partner_ids
+      relation: res.partner
+      type: many2many
+model_from: res.partner.category
+model_to: res.partner.category

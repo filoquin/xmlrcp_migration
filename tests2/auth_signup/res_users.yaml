@@ -1,0 +1,30 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_users_%s
+fields:
+  signup_expiration:
+    from:
+      name: signup_expiration
+      type: datetime
+    map_method: magic_map
+    to:
+      name: signup_expiration
+      type: datetime
+  signup_token:
+    from:
+      name: signup_token
+      type: char
+    map_method: magic_map
+    to:
+      name: signup_token
+      type: char
+  signup_type:
+    from:
+      name: signup_type
+      type: char
+    map_method: magic_map
+    to:
+      name: signup_type
+      type: char
+model_from: res.users
+model_to: res.users
