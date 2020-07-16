@@ -1,0 +1,42 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: sale_order_%s
+fields:
+  campaign_id:
+    from:
+      name: campaign_id
+      relation: crm.tracking.campaign
+      type: many2one
+    map_method: magic_map
+    to:
+      name: campaign_id
+      relation: utm.campaign
+      type: many2one
+  medium_id:
+    from:
+      name: medium_id
+      relation: crm.tracking.medium
+      type: many2one
+    map_method: magic_map
+    to:
+      name: medium_id
+      relation: utm.medium
+      type: many2one
+  source_id:
+    from:
+      name: source_id
+      relation: crm.tracking.source
+      type: many2one
+    map_method: magic_map
+    to:
+      name: source_id
+      relation: utm.source
+      type: many2one
+model_from: sale.order
+model_to: sale.order
+no_match_fields:
+  categ_ids:
+    from:
+      name: categ_ids
+      relation: crm.case.categ
+      type: many2many

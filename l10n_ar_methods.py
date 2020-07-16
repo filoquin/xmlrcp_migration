@@ -30,7 +30,7 @@ def validar_cuit(cuit):
         return None
 
 
-def map_document_number(self, value, field, plan, row, cache=False):
+def map_document_number(self, value, field, plan, row, field_collection='fields'):
     if row['document_type_id'] and row['document_type_id'][1] == 'CUIT' and value:
         return validar_cuit(value)
     elif row['document_type_id'] and row['document_type_id'][1] == 'DNI' and value:

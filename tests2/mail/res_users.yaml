@@ -42,3 +42,63 @@ fields:
       type: one2many
 model_from: res.users
 model_to: res.users
+no_match_fields:
+  alias_defaults:
+    from:
+      name: alias_defaults
+      type: text
+  alias_domain:
+    from:
+      name: alias_domain
+      type: char
+  alias_force_thread_id:
+    from:
+      name: alias_force_thread_id
+      type: integer
+  alias_model_id:
+    from:
+      name: alias_model_id
+      relation: ir.model
+      type: many2one
+  alias_name:
+    from:
+      name: alias_name
+      type: char
+  alias_parent_model_id:
+    from:
+      name: alias_parent_model_id
+      relation: ir.model
+      type: many2one
+  alias_parent_thread_id:
+    from:
+      name: alias_parent_thread_id
+      type: integer
+  alias_user_id:
+    from:
+      name: alias_user_id
+      relation: res.users
+      type: many2one
+  display_groups_suggestions:
+    from:
+      name: display_groups_suggestions
+      type: boolean
+  message_is_follower:
+    from:
+      name: message_is_follower
+      type: boolean
+  message_last_post:
+    from:
+      name: message_last_post
+      type: datetime
+  message_summary:
+    from:
+      name: message_summary
+      type: text
+  message_unread:
+    from:
+      name: message_unread
+      type: boolean
+  notify_email:
+    from:
+      name: notify_email
+      type: selection

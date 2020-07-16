@@ -28,3 +28,16 @@ fields:
       type: char
 model_from: res.users
 model_to: res.users
+no_match_fields:
+  signup_url:
+    from:
+      name: signup_url
+      type: char
+  signup_valid:
+    from:
+      name: signup_valid
+      type: boolean
+  state:
+    from:
+      name: state
+      type: selection

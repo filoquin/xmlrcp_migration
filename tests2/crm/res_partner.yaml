@@ -26,3 +26,22 @@ fields:
       type: one2many
 model_from: res.partner
 model_to: res.partner
+no_match_fields:
+  meeting_count:
+    from:
+      name: meeting_count
+      type: integer
+  opportunity_count:
+    from:
+      name: opportunity_count
+      type: integer
+  phonecall_count:
+    from:
+      name: phonecall_count
+      type: integer
+  phonecall_ids:
+    from:
+      name: phonecall_ids
+      relation: crm.phonecall
+      relation_field: partner_id
+      type: one2many

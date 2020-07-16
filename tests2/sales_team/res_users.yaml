@@ -14,3 +14,14 @@ fields:
       type: many2one
 model_from: res.users
 model_to: res.users
+no_match_fields:
+  default_section_id:
+    from:
+      name: default_section_id
+      relation: crm.case.section
+      type: many2one
+  section_id:
+    from:
+      name: section_id
+      relation: crm.case.section
+      type: many2one

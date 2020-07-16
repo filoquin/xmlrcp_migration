@@ -252,3 +252,91 @@ fields:
       type: float
 model_from: product.template
 model_to: product.template
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char
+  ean13:
+    from:
+      name: ean13
+      type: char
+  image:
+    from:
+      name: image
+      type: binary
+  image_medium:
+    from:
+      name: image_medium
+      type: binary
+  image_small:
+    from:
+      name: image_small
+      type: binary
+  is_product_variant:
+    from:
+      name: is_product_variant
+      type: boolean
+  mes_type:
+    from:
+      name: mes_type
+      type: selection
+  message_is_follower:
+    from:
+      name: message_is_follower
+      type: boolean
+  message_last_post:
+    from:
+      name: message_last_post
+      type: datetime
+  message_summary:
+    from:
+      name: message_summary
+      type: text
+  message_unread:
+    from:
+      name: message_unread
+      type: boolean
+  product_manager:
+    from:
+      name: product_manager
+      relation: res.users
+      type: many2one
+  product_variant_count:
+    from:
+      name: product_variant_count
+      type: integer
+  seller_delay:
+    from:
+      name: seller_delay
+      type: integer
+  seller_id:
+    from:
+      name: seller_id
+      relation: res.partner
+      type: many2one
+  seller_qty:
+    from:
+      name: seller_qty
+      type: float
+  state:
+    from:
+      name: state
+      type: selection
+  uos_coeff:
+    from:
+      name: uos_coeff
+      type: float
+  uos_id:
+    from:
+      name: uos_id
+      relation: product.uom
+      type: many2one
+  warranty:
+    from:
+      name: warranty
+      type: float
+  weight_net:
+    from:
+      name: weight_net
+      type: float

@@ -15,3 +15,9 @@ fields:
       type: one2many
 model_from: product.product
 model_to: product.product
+no_match_fields:
+  tmpl_seller_ids:
+    from:
+      name: tmpl_seller_ids
+      relation: product.supplierinfo
+      type: many2many

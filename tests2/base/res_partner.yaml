@@ -286,3 +286,65 @@ fields:
       type: char
 model_from: res.partner
 model_to: res.partner
+no_match_fields:
+  birthdate:
+    from:
+      name: birthdate
+      type: char
+  commercial_partner_id:
+    from:
+      name: commercial_partner_id
+      relation: res.partner
+      type: many2one
+  contact_address:
+    from:
+      name: contact_address
+      type: char
+  customer:
+    from:
+      name: customer
+      type: boolean
+  display_name:
+    from:
+      name: display_name
+      type: char
+  ean13:
+    from:
+      name: ean13
+      type: char
+  fax:
+    from:
+      name: fax
+      type: char
+  has_image:
+    from:
+      name: has_image
+      type: boolean
+  image:
+    from:
+      name: image
+      type: binary
+  image_medium:
+    from:
+      name: image_medium
+      type: binary
+  image_small:
+    from:
+      name: image_small
+      type: binary
+  parent_name:
+    from:
+      name: parent_name
+      type: char
+  supplier:
+    from:
+      name: supplier
+      type: boolean
+  tz_offset:
+    from:
+      name: tz_offset
+      type: char
+  use_parent_address:
+    from:
+      name: use_parent_address
+      type: boolean

@@ -12,3 +12,75 @@ fields:
       type: monetary
 model_from: res.partner
 model_to: res.partner
+no_match_fields:
+  contract_ids:
+    from:
+      name: contract_ids
+      relation: account.analytic.account
+      relation_field: partner_id
+      type: one2many
+  contracts_count:
+    from:
+      name: contracts_count
+      type: integer
+  credit:
+    from:
+      name: credit
+      type: float
+  debit:
+    from:
+      name: debit
+      type: float
+  invoice_ids:
+    from:
+      name: invoice_ids
+      relation: account.invoice
+      relation_field: partner_id
+      type: one2many
+  journal_item_count:
+    from:
+      name: journal_item_count
+      type: integer
+  last_reconciliation_date:
+    from:
+      name: last_reconciliation_date
+      type: datetime
+  property_account_payable:
+    from:
+      name: property_account_payable
+      relation: account.account
+      type: many2one
+  property_account_position:
+    from:
+      name: property_account_position
+      relation: account.fiscal.position
+      type: many2one
+  property_account_receivable:
+    from:
+      name: property_account_receivable
+      relation: account.account
+      type: many2one
+  property_payment_term:
+    from:
+      name: property_payment_term
+      relation: account.payment.term
+      type: many2one
+  property_supplier_payment_term:
+    from:
+      name: property_supplier_payment_term
+      relation: account.payment.term
+      type: many2one
+  ref_companies:
+    from:
+      name: ref_companies
+      relation: res.company
+      relation_field: partner_id
+      type: one2many
+  total_invoiced:
+    from:
+      name: total_invoiced
+      type: float
+  vat_subjected:
+    from:
+      name: vat_subjected
+      type: boolean

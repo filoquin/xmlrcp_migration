@@ -4,7 +4,14 @@ domain: []
 external_id_method: row_get_id
 external_id_nomenclature: sale_order_%s
 fields:
-
+  name:
+    from:
+      name: name
+      type: selection
+    map_method: magic_map
+    to:
+      name: name
+      type: selection
   partner_id:
     from:
       name: partner_id
@@ -90,6 +97,7 @@ fields:
       relation: res.users
       type: many2one
     map_method: magic_map
+    cache: True
     to:
       name: user_id
       relation: res.users
@@ -114,3 +122,25 @@ fields:
       name: team_id
       relation: crm.team
       type: many2one
+  date_order:
+    from:
+      name: date_order
+      type: datetime
+    to:
+      name: date_order
+      type: datetime
+    map_method: magic_map
+
+after_save_fields:
+  order_line:
+    from:
+      name: order_line
+      relation: sale.order.line
+      relation_field: order_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: order_line
+      relation: sale.order.line
+      relation_field: order_id
+      type: one2many

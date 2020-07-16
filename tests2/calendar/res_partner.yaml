@@ -12,3 +12,4 @@ fields:
       type: datetime
 model_from: res.partner
 model_to: res.partner
+no_match_fields: []

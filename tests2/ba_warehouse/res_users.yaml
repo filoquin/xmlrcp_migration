@@ -14,3 +14,28 @@ fields:
       type: many2one
 model_from: res.users
 model_to: res.users
+no_match_fields:
+  magenta_codpro_fa1_id:
+    from:
+      name: magenta_codpro_fa1_id
+      relation: res.country.state
+      type: many2one
+  magenta_codpro_fa2_id:
+    from:
+      name: magenta_codpro_fa2_id
+      relation: res.country.state
+      type: many2one
+  magenta_pro_lab_co:
+    from:
+      name: magenta_pro_lab_co
+      relation: res.country.state
+      type: many2one
+  stock_team_id:
+    from:
+      name: stock_team_id
+      relation: stock.team
+      type: many2one
+  supplier_orderpoint:
+    from:
+      name: supplier_orderpoint
+      type: boolean

@@ -52,3 +52,20 @@ fields:
       type: many2many
 model_from: res.partner.category
 model_to: res.partner.category
+no_match_fields:
+  complete_name:
+    from:
+      name: complete_name
+      type: char
+  display_name:
+    from:
+      name: display_name
+      type: char
+  parent_left:
+    from:
+      name: parent_left
+      type: integer
+  parent_right:
+    from:
+      name: parent_right
+      type: integer

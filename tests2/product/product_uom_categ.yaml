@@ -12,3 +12,8 @@ fields:
       type: char
 model_from: product.uom.categ
 model_to: uom.category
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char

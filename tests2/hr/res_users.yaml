@@ -1,0 +1,27 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_users_%s
+fields:
+  employee_ids:
+    from:
+      name: employee_ids
+      relation: hr.employee
+      relation_field: user_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: employee_ids
+      relation: hr.employee
+      relation_field: user_id
+      type: one2many
+model_from: res.users
+model_to: res.users
+no_match_fields:
+  display_employees_suggestions:
+    from:
+      name: display_employees_suggestions
+      type: boolean
+  opt_out:
+    from:
+      name: opt_out
+      type: boolean

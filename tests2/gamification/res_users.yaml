@@ -22,3 +22,4 @@ fields:
       type: many2one
 model_from: res.users
 model_to: res.users
+no_match_fields: []

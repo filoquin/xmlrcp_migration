@@ -1,0 +1,63 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_country_%s
+fields:
+  address_format:
+    from:
+      name: address_format
+      type: text
+    map_method: magic_map
+    to:
+      name: address_format
+      type: text
+  code:
+    from:
+      name: code
+      type: char
+    map_method: magic_map
+    to:
+      name: code
+      type: char
+  country_group_ids:
+    from:
+      name: country_group_ids
+      relation: res.country.group
+      type: many2many
+    map_method: magic_map
+    to:
+      name: country_group_ids
+      relation: res.country.group
+      type: many2many
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+    map_method: magic_map
+    to:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  image:
+    from:
+      name: image
+      type: binary
+    map_method: magic_map
+    to:
+      name: image
+      type: binary
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+model_from: res.country
+model_to: res.country
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char

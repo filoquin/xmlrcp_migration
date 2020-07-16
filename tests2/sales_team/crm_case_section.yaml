@@ -72,3 +72,59 @@ fields:
       type: many2one
 model_from: crm.case.section
 model_to: crm.team
+no_match_fields:
+  change_responsible:
+    from:
+      name: change_responsible
+      type: boolean
+  child_ids:
+    from:
+      name: child_ids
+      relation: crm.case.section
+      relation_field: parent_id
+      type: one2many
+  code:
+    from:
+      name: code
+      type: char
+  complete_name:
+    from:
+      name: complete_name
+      type: char
+  display_name:
+    from:
+      name: display_name
+      type: char
+  message_is_follower:
+    from:
+      name: message_is_follower
+      type: boolean
+  message_last_post:
+    from:
+      name: message_last_post
+      type: datetime
+  message_summary:
+    from:
+      name: message_summary
+      type: text
+  message_unread:
+    from:
+      name: message_unread
+      type: boolean
+  note:
+    from:
+      name: note
+      type: text
+  parent_id:
+    from:
+      name: parent_id
+      relation: crm.case.section
+      type: many2one
+  reply_to:
+    from:
+      name: reply_to
+      type: char
+  working_hours:
+    from:
+      name: working_hours
+      type: float

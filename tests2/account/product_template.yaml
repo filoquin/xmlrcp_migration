@@ -24,3 +24,14 @@ fields:
       type: many2many
 model_from: product.template
 model_to: product.template
+no_match_fields:
+  property_account_expense:
+    from:
+      name: property_account_expense
+      relation: account.account
+      type: many2one
+  property_account_income:
+    from:
+      name: property_account_income
+      relation: account.account
+      type: many2one

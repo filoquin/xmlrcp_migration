@@ -24,3 +24,4 @@ fields:
       type: many2one
 model_from: res.partner
 model_to: res.partner
+no_match_fields: []

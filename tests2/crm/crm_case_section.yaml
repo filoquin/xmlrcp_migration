@@ -100,3 +100,26 @@ fields:
       type: boolean
 model_from: crm.case.section
 model_to: crm.team
+no_match_fields:
+  alias_domain:
+    from:
+      name: alias_domain
+      type: char
+  monthly_open_leads:
+    from:
+      name: monthly_open_leads
+      type: char
+  monthly_planned_revenue:
+    from:
+      name: monthly_planned_revenue
+      type: char
+  resource_calendar_id:
+    from:
+      name: resource_calendar_id
+      relation: resource.calendar
+      type: many2one
+  stage_ids:
+    from:
+      name: stage_ids
+      relation: crm.case.stage
+      type: many2many

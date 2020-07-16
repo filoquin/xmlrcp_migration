@@ -1,0 +1,14 @@
+model_from: sale.order
+model_to: sale.order
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: sale_order_%s
+fields:
+  date_validity:
+    from:
+      name: date_validity
+      type: date
+    map_method: magic_map
+    to:
+      name: validity_date
+      type: date

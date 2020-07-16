@@ -42,3 +42,53 @@ fields:
       type: float
 model_from: product.template
 model_to: product.template
+no_match_fields:
+  incoming_qty:
+    from:
+      name: incoming_qty
+      type: float
+  loc_case:
+    from:
+      name: loc_case
+      type: char
+  loc_rack:
+    from:
+      name: loc_rack
+      type: char
+  loc_row:
+    from:
+      name: loc_row
+      type: char
+  outgoing_qty:
+    from:
+      name: outgoing_qty
+      type: float
+  property_stock_procurement:
+    from:
+      name: property_stock_procurement
+      relation: stock.location
+      type: many2one
+  qty_available:
+    from:
+      name: qty_available
+      type: float
+  qty_available_text:
+    from:
+      name: qty_available_text
+      type: char
+  track_all:
+    from:
+      name: track_all
+      type: boolean
+  track_incoming:
+    from:
+      name: track_incoming
+      type: boolean
+  track_outgoing:
+    from:
+      name: track_outgoing
+      type: boolean
+  virtual_available:
+    from:
+      name: virtual_available
+      type: float

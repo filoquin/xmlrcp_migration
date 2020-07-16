@@ -1,0 +1,165 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: sale_order_line_%s
+fields:
+  discount:
+    from:
+      name: discount
+      type: float
+    map_method: magic_map
+    to:
+      name: discount
+      type: float
+  invoice_lines:
+    from:
+      name: invoice_lines
+      relation: account.invoice.line
+      type: many2many
+    map_method: magic_map
+    to:
+      name: invoice_lines
+      relation: account.move.line
+      type: many2many
+  name:
+    from:
+      name: name
+      type: text
+    map_method: magic_map
+    to:
+      name: name
+      type: text
+  order_id:
+    from:
+      name: order_id
+      relation: sale.order
+      type: many2one
+    map_method: magic_map
+    to:
+      name: order_id
+      relation: sale.order
+      type: many2one
+  order_partner_id:
+    from:
+      name: order_partner_id
+      relation: res.partner
+      type: many2one
+    map_method: magic_map
+    to:
+      name: order_partner_id
+      relation: res.partner
+      type: many2one
+  price_unit:
+    from:
+      name: price_unit
+      type: float
+    map_method: magic_map
+    to:
+      name: price_unit
+      type: float
+  product_id:
+    from:
+      name: product_id
+      relation: product.product
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_id
+      relation: product.product
+      type: many2one
+  product_uom:
+    from:
+      name: product_uom
+      relation: product.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_uom
+      relation: uom.uom
+      type: many2one
+  product_uom_qty:
+    from:
+      name: product_uom_qty
+      type: float
+    map_method: magic_map
+    to:
+      name: product_uom_qty
+      type: float
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer
+  tax_id:
+    from:
+      name: tax_id
+      relation: account.tax
+      type: many2many
+    map_method: magic_map
+    to:
+      name: tax_id
+      relation: account.tax
+      type: many2many
+model_from: sale.order.line
+model_to: sale.order.line
+no_match_fields:
+  address_allotment_id:
+    from:
+      name: address_allotment_id
+      relation: res.partner
+      type: many2one
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+  delay:
+    from:
+      name: delay
+      type: float
+  display_name:
+    from:
+      name: display_name
+      type: char
+  invoiced:
+    from:
+      name: invoiced
+      type: boolean
+  price_reduce:
+    from:
+      name: price_reduce
+      type: float
+  price_subtotal:
+    from:
+      name: price_subtotal
+      type: float
+  procurement_ids:
+    from:
+      name: procurement_ids
+      relation: procurement.order
+      relation_field: sale_line_id
+      type: one2many
+  product_uos:
+    from:
+      name: product_uos
+      relation: product.uom
+      type: many2one
+  product_uos_qty:
+    from:
+      name: product_uos_qty
+      type: float
+  salesman_id:
+    from:
+      name: salesman_id
+      relation: res.users
+      type: many2one
+  state:
+    from:
+      name: state
+      type: selection
+  th_weight:
+    from:
+      name: th_weight
+      type: float

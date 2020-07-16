@@ -94,3 +94,76 @@ fields:
       type: many2one
 model_from: product.product
 model_to: product.product
+no_match_fields:
+  delivery_count:
+    from:
+      name: delivery_count
+      type: integer
+  incoming_qty:
+    from:
+      name: incoming_qty
+      type: float
+  loc_case:
+    from:
+      name: loc_case
+      type: char
+  loc_rack:
+    from:
+      name: loc_rack
+      type: char
+  loc_row:
+    from:
+      name: loc_row
+      type: char
+  outgoing_qty:
+    from:
+      name: outgoing_qty
+      type: float
+  product_brand_id:
+    from:
+      name: product_brand_id
+      relation: product.brand
+      type: many2one
+  property_account_expense:
+    from:
+      name: property_account_expense
+      relation: account.account
+      type: many2one
+  property_account_income:
+    from:
+      name: property_account_income
+      relation: account.account
+      type: many2one
+  property_stock_procurement:
+    from:
+      name: property_stock_procurement
+      relation: stock.location
+      type: many2one
+  qty_available:
+    from:
+      name: qty_available
+      type: float
+  qty_available_text:
+    from:
+      name: qty_available_text
+      type: char
+  reception_count:
+    from:
+      name: reception_count
+      type: integer
+  track_all:
+    from:
+      name: track_all
+      type: boolean
+  track_incoming:
+    from:
+      name: track_incoming
+      type: boolean
+  track_outgoing:
+    from:
+      name: track_outgoing
+      type: boolean
+  virtual_available:
+    from:
+      name: virtual_available
+      type: float
