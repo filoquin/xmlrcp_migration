@@ -177,6 +177,7 @@ class odoo_xmlrcp_migration(object):
         field_names = plan['fields'].keys()
         after_save_fields = plan['after_save_fields'].keys() if 'after_save_fields' in plan else []
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
+            print "remuevo %s de %s " % (kwargs['ignore_field'], model_name)
             field_names.remove(kwargs['ignore_field'])
 
         if 'row_ids' in kwargs:
@@ -291,10 +292,14 @@ class odoo_xmlrcp_migration(object):
                 if len(ext_id):
                     res_ids.append(ext_id[0]['res_id'])
                 else:
+                    if field_data.get('required', False):
+                        ignore_field = field_data['from']['relation_field']
+                    else:
+                        ignore_field = False
                     new = self.migrate(
                         field_data['from']['relation'],
                         row_ids=[res_id],
-                        # ignore_field=field_data['from']['relation_field']
+                        ignore_field=ignore_field
 
                     )
                     res_ids.append(new['create'][0])

@@ -1,7 +1,7 @@
 from odoo_xmlrcp_migration import odoo_xmlrcp_migration
 
 
-plan = odoo_xmlrcp_migration()
+plan = odoo_xmlrcp_migration('/etc/odoo_xmlrcp_migration2.conf')
 plan.save_plan('res.users')
 plan.save_plan('res.partner')
 plan.save_plan('sale.order')
@@ -17,7 +17,4 @@ plan.save_plan('res.country.state')
 plan.save_plan('res.country.state.city', 'res.city')
 
 
-plan.save_plan('res.partner.category')
-# plan.domain = [('id', '>', 134383), ]
-#plan.migrate('res.partner', row_ids=[57133])
-#plan.migrate('res.partner')
+#plan.save_plan('res.partner.category')
